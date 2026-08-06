@@ -1006,17 +1006,17 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
         <!-- Яндекс Карта: появится после загрузки страницы (см. JS) -->
       </div>
       <div class="map-frame-wrap" id="map2gis">
-        <iframe src="https://widgets.2gis.com/widget?center=93.354167%2C56.126389&zoom=17&size=m" title="2ГИС Карта: СТРОЙМАРКЕТ" loading="lazy" allowfullscreen></iframe>
+        <iframe src="https://widgets.2gis.com/widget?center=56.129435%2C93.361419&zoom=18&size=m" title="2ГИС Карта: СТРОЙМАРКЕТ" loading="lazy" allowfullscreen></iframe>
       </div>
       <div class="map-overlay-card">
         <b>🏗️ СТРОЙМАРКЕТ</b>
-        <div class="row"><span class="ico">📍</span><span>г. Сосновоборск, ул. Заводская, 1/7</span></div>
+        <div class="row"><span class="ico">📍</span><span>г. Сосновоборск, ул. Заводская, д. 1, корп. 7</span></div>
         <div class="row"><span class="ico">🕒</span><span>Ежедневно 9:00–20:00</span></div>
         <div class="row"><span class="ico">📞</span><span>+7 (391) 988-91-95</span></div>
-        <a href="https://yandex.ru/maps/?rtext=~56.126389,93.354167" target="_blank" rel="noopener" class="btn btn-primary">Построить маршрут</a>
+        <a href="https://yandex.ru/maps/?rtext=~56.129435,93.361419" target="_blank" rel="noopener" class="btn btn-primary">Построить маршрут</a>
       </div>
     </div>
-    <p class="coord-note">Координаты: 56.126389, 93.354167 — при необходимости уточните и обновите в файле (см. README)</p>
+    <p class="coord-note">Координаты: 56.129435, 93.361419 — г. Сосновоборск, ул. Заводская, д. 1, корп. 7 (см. README)</p>
   </div>
 </section>
 
@@ -1267,8 +1267,8 @@ function initYandexMap(){
   iframe.className='map-frame';
   iframe.setAttribute('allowfullscreen','');
   iframe.loading='lazy';
-  // Используем встроенный виджет Яндекс Карт с меткой по адресу
-  iframe.src='https://yandex.ru/map-widget/v1/?ll=93.354167%2C56.126389&z=17&mode=whatshere&whatshere%5Bpoint%5D=93.354167%2C56.126389&whatshere%5Bzoom%5D=17';
+  // Используем встроенный виджет Яндекс Карт с меткой по точным координатам магазина
+  iframe.src='https://yandex.ru/map-widget/v1/?ll=93.361419%2C56.129435&z=18.6&pt=93.361419%2C56.129435%2Cpm2rdm';
   wrap.appendChild(iframe);
 }
 </script>
