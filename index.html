@@ -1013,10 +1013,10 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
         <div class="row"><span class="ico">📍</span><span>г. Сосновоборск, ул. Заводская, д. 1, корп. 7</span></div>
         <div class="row"><span class="ico">🕒</span><span>Ежедневно 9:00–20:00</span></div>
         <div class="row"><span class="ico">📞</span><span>+7 (391) 988-91-95</span></div>
-        <a href="https://yandex.ru/maps/?rtext=~56.129435,93.361419" target="_blank" rel="noopener" class="btn btn-primary">Построить маршрут</a>
+        <a href="https://yandex.ru/maps/?rtext=~56.129363,93.360340" target="_blank" rel="noopener" class="btn btn-primary">Построить маршрут</a>
       </div>
     </div>
-    <p class="coord-note">Координаты: 56.129435, 93.361419 — г. Сосновоборск, ул. Заводская, д. 1, корп. 7 (см. README)</p>
+    <p class="coord-note">Координаты: 56.129363, 93.360340 — г. Сосновоборск, ул. Заводская, д. 1, корп. 7 (см. README)</p>
   </div>
 </section>
 
@@ -1267,8 +1267,8 @@ function initYandexMap(){
   iframe.className='map-frame';
   iframe.setAttribute('allowfullscreen','');
   iframe.loading='lazy';
-  // Используем встроенный виджет Яндекс Карт с меткой по точным координатам магазина
-  iframe.src='https://yandex.ru/map-widget/v1/?ll=93.361419%2C56.129435&z=18.6&pt=93.361419%2C56.129435%2Cpm2rdm';
+  // Встроенный виджет Яндекс Карт с официальной карточкой организации СТРОЙМАРКЕТ (oid=187432536330)
+  iframe.src='https://yandex.ru/map-widget/v1/?ll=93.360794%2C56.129110&mode=poi&poi%5Bpoint%5D=93.360340%2C56.129363&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D187432536330&z=15.8';
   wrap.appendChild(iframe);
 }
 </script>
