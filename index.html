@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СТРОЙМАРКЕТ — крупнейший строительный магазин в Сосновоборске</title>
+<meta name="description" content="СТРОЙМАРКЕТ — самый крупный строительный магазин в Сосновоборске. 500+ категорий товаров, 3690 м² торговых площадей. г. Сосновоборск, ул. Заводская, 1/7. Ежедневно 9:00–20:00.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ======================== БАЗА ======================== */
+:root{
+  --bg:#05070d;
+  --bg-2:#0a0f1c;
+  --panel:rgba(255,255,255,.04);
+  --panel-2:rgba(255,255,255,.07);
+  --stroke:rgba(255,255,255,.09);
+  --text:#eef2ff;
+  --muted:#8b93a7;
+  --yellow:#ffc400;
+  --yellow-2:#ffea70;
+  --orange:#ff7a00;
+  --cyan:#00e5ff;
+  --green:#00ff85;
+  --red:#ff3b5c;
+  --radius:20px;
+  --font-title:'Unbounded',sans-serif;
+  --font-body:'Manrope',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+::selection{background:var(--yellow);color:#000}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--yellow),var(--orange));border-radius:10px}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:1240px;margin:0 auto;padding:0 24px}
+section{position:relative}
+
+/* ======================== ШУМ / ГРАДИЕНТ ФОН ======================== */
+.noise{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-glow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(255,196,0,.12), transparent 60%),
+    radial-gradient(800px 600px at -10% 20%, rgba(0,229,255,.08), transparent 60%),
+    radial-gradient(700px 700px at 50% 120%, rgba(255,122,0,.09), transparent 60%);
+  animation:bgShift 18s ease-in-out infinite alternate;
+}
+@keyframes bgShift{
+  0%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(-2%,3%) scale(1.05)}
+}
+
+/* ======================== ПРЕЛОАДЕР ======================== */
+#preloader{
+  position:fixed;inset:0;z-index:9999;background:#05070d;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  transition:opacity .7s ease,visibility .7s ease;
+}
+#preloader.hide{opacity:0;visibility:hidden}
+.loader-logo{
+  font-family:var(--font-title);font-weight:900;font-size:clamp(28px,5vw,52px);
+  letter-spacing:.02em;position:relative;
+  background:linear-gradient(90deg,var(--yellow),var(--orange),var(--yellow));
+  background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:loadSheen 2s linear infinite;
+}
+@keyframes loadSheen{0%{background-position:0% 0}100%{background-position:200% 0}}
+.loader-bar{width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
+.loader-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:10px;animation:loadBar 1.6s ease forwards}
+@keyframes loadBar{to{width:100%}}
+.loader-text{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted)}
+
+/* ======================== КАСТОМНЫЙ КУРСОР ======================== */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9000;border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cursor-dot{width:8px;height:8px;background:#fff}
+.cursor-ring{width:38px;height:38px;border:1.5px solid rgba(255,255,255,.55);transition:width .25s,height .25s,border-color .25s}
+.cursor-ring.grow{width:58px;height:58px;border-color:var(--yellow)}
+@media (pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
+
+/* ======================== НАВИГАЦИЯ ======================== */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(5,7,13,.6);
+  border-bottom:1px solid var(--stroke);
+  transition:transform .4s ease,background .4s ease;
+}
+header.scrolled{background:rgba(5,7,13,.85);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+header.hidden-nav{transform:translateY(-110%)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{
+  font-family:var(--font-title);font-weight:900;font-size:19px;letter-spacing:.04em;
+  display:flex;align-items:center;gap:10px;
+}
+.logo .icon{
+  width:40px;height:40px;border-radius:12px;position:relative;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  display:grid;place-items:center;font-size:20px;
+  box-shadow:0 0 24px rgba(255,196,0,.35);
+  overflow:hidden;
+}
+.logo .icon::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);
+  transform:translateX(-100%);
+  animation:logoScan 3.5s ease-in-out infinite;
+}
+@keyframes logoScan{60%,100%{transform:translateX(100%)}}
+.logo b{font-weight:900;background:linear-gradient(90deg,#fff,var(--yellow));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  position:relative;padding:9px 15px;border-radius:12px;font-size:14px;font-weight:600;color:var(--muted);
+  transition:color .3s,background .3s;
+}
+.nav-links a:hover{color:#fff;background:var(--panel-2)}
+.nav-links a::after{
+  content:'';position:absolute;left:15px;right:15px;bottom:5px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--yellow),var(--orange));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s ease;
+}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{
+  padding:11px 20px;border-radius:14px;font-weight:800;font-size:14px;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  color:#000;box-shadow:0 6px 24px rgba(255,160,0,.3);
+  transition:transform .3s,box-shadow .3s;
+  white-space:nowrap;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,160,0,.45)}
+.nav-burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
+.nav-burger span{width:26px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+.nav-burger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.active span:nth-child(2){opacity:0}
+.nav-burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ======================== HERO ======================== */
+#particles{position:absolute;inset:0;z-index:1}
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:140px 24px 80px;position:relative;overflow:hidden;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:100px;font-size:13px;font-weight:700;letter-spacing:.06em;
+  background:var(--panel);border:1px solid var(--stroke);color:var(--muted);
+  backdrop-filter:blur(10px);
+  margin-bottom:28px;animation:fadeUp .9s .1s both;
+}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.hero h1{
+  font-family:var(--font-title);font-weight:900;
+  font-size:clamp(44px,9vw,118px);line-height:.95;letter-spacing:.01em;
+  margin-bottom:26px;position:relative;z-index:2;animation:fadeUp .9s .25s both;
+}
+.hero h1 .grad{
+  background:linear-gradient(100deg,var(--yellow) 0%,var(--orange) 45%,#ff5e62 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  position:relative;display:inline-block;
+  filter:drop-shadow(0 0 34px rgba(255,170,0,.35));
+}
+.hero h1 .outline{
+  color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.75);
+  display:inline-block;
+}
+.hero-sub{
+  max-width:620px;margin:0 auto 40px;font-size:clamp(16px,2vw,20px);
+  color:var(--muted);position:relative;z-index:2;animation:fadeUp .9s .4s both;
+}
+.hero-sub b{color:var(--yellow);font-weight:800}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;animation:fadeUp .9s .55s both}
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:17px 34px;border-radius:16px;font-weight:800;font-size:15px;
+  overflow:hidden;transition:transform .3s,box-shadow .3s;border:none;cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  color:#000;box-shadow:0 10px 36px rgba(255,160,0,.35);
+}
+.btn-primary::before{
+  content:'';position:absolute;top:0;left:-80%;width:60%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);
+  transform:skewX(-20deg);animation:sheen 3.2s ease-in-out infinite;
+}
+@keyframes sheen{0%,60%{left:-80%}100%{left:130%}}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 48px rgba(255,160,0,.5)}
+.btn-ghost{
+  background:var(--panel);color:#fff;border:1px solid var(--stroke);
+  backdrop-filter:blur(8px);
+}
+.btn-ghost:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3);background:var(--panel-2);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.hero-stats{
+  display:flex;gap:clamp(30px,6vw,90px);justify-content:center;flex-wrap:wrap;
+  margin-top:70px;position:relative;z-index:2;animation:fadeUp .9s .7s both;
+}
+.hero-stat{text-align:center}
+.hero-stat .num{
+  font-family:var(--font-title);font-weight:900;
+  font-size:clamp(30px,4.5vw,52px);
+  background:linear-gradient(180deg,#fff,var(--muted));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  display:block;line-height:1;
+}
+.hero-stat .num.yellow{background:linear-gradient(180deg,var(--yellow-2),var(--orange));-webkit-background-clip:text;background-clip:text}
+.hero-stat .lbl{
+  margin-top:8px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
+.hero-scroll{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);z-index:3;
+  font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+}
+.mouse{width:26px;height:42px;border:2px solid var(--muted);border-radius:20px;position:relative}
+.mouse::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:4px;height:8px;border-radius:4px;background:var(--yellow);animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;top:8px}100%{opacity:0;top:22px}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* ======================== БЕГУЩАЯ СТРОКА ======================== */
+.marquee{
+  position:relative;z-index:2;overflow:hidden;padding:22px 0;
+  border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke);
+  background:rgba(255,255,255,.02);
+  transform:rotate(-1.2deg) scale(1.03);margin:20px 0;
+}
+.marquee-track{display:flex;gap:40px;width:max-content;animation:marquee 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{
+  font-family:var(--font-title);font-weight:600;font-size:clamp(16px,2.4vw,26px);white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.3);
+}
+.marquee-track span i{color:var(--yellow);-webkit-text-stroke:0;font-style:normal;margin:0 6px}
+.marquee-track .solid{color:var(--yellow);-webkit-text-stroke:0}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ======================== СЕКЦИИ: ОБЩЕЕ ======================== */
+.section{padding:120px 0}
+.section-head{text-align:center;margin-bottom:70px;position:relative;z-index:2}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:18px;
+}
+.kicker::before,.kicker::after{content:'';width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--yellow))}
+.kicker::after{background:linear-gradient(90deg,var(--yellow),transparent)}
+.section-head h2{
+  font-family:var(--font-title);font-weight:900;
+  font-size:clamp(30px,5vw,56px);line-height:1.05;margin-bottom:18px;
+}
+.section-head p{color:var(--muted);max-width:640px;margin:0 auto;font-size:17px}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .9s ease,transform .9s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal[data-delay="1"]{transition-delay:.12s}
+.reveal[data-delay="2"]{transition-delay:.24s}
+.reveal[data-delay="3"]{transition-delay:.36s}
+
+/* ======================== О МАГАЗИНЕ ======================== */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+.about-visual{position:relative}
+.about-photo{
+  border-radius:var(--radius);overflow:hidden;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  transform:perspective(1200px) rotateY(-4deg) rotateX(2deg);
+  transition:transform .6s ease;
+}
+.about-photo:hover{transform:perspective(1200px) rotateY(0) rotateX(0)}
+.about-photo img{width:100%;height:520px;object-fit:cover;transition:transform .8s ease}
+.about-photo:hover img{transform:scale(1.06)}
+.about-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(5,7,13,.85));
+}
+.about-photo .tag{
+  position:absolute;left:20px;bottom:20px;z-index:2;
+  background:rgba(5,7,13,.6);backdrop-filter:blur(12px);
+  border:1px solid var(--stroke);border-radius:14px;padding:14px 20px;
+  font-weight:800;font-size:14px;display:flex;align-items:center;gap:10px;
+}
+.about-photo .tag .pulse-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:pulse 1.4s infinite}
+.about-float{
+  position:absolute;right:-20px;top:40px;z-index:3;
+  background:rgba(255,255,255,.07);backdrop-filter:blur(20px);
+  border:1px solid var(--stroke);border-radius:18px;padding:18px 24px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  animation:floatY 5s ease-in-out infinite;
+}
+.about-float .big{font-family:var(--font-title);font-weight:900;font-size:30px;color:var(--yellow);line-height:1}
+.about-float .sm{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.05em}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.about-info h3{
+  font-family:var(--font-title);font-size:clamp(22px,3vw,32px);font-weight:700;line-height:1.2;margin-bottom:22px;
+}
+.about-info h3 .grad{background:linear-gradient(90deg,var(--yellow),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.about-info p{color:var(--muted);margin-bottom:30px;font-size:16.5px}
+.about-list{display:flex;flex-direction:column;gap:16px}
+.about-item{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:16px;
+  padding:18px 20px;transition:transform .3s,border-color .3s,background .3s;
+}
+.about-item:hover{transform:translateX(8px);border-color:rgba(255,196,0,.4);background:var(--panel-2)}
+.about-item .ico{
+  flex-shrink:0;width:46px;height:46px;border-radius:12px;font-size:22px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(255,196,0,.16),rgba(255,122,0,.16));
+  border:1px solid rgba(255,196,0,.25);
+}
+.about-item b{display:block;font-size:15.5px;margin-bottom:3px}
+.about-item span{font-size:14px;color:var(--muted)}
+
+/* ======================== АССОРТИМЕНТ ======================== */
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative;z-index:2}
+.cat-card{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  background:var(--panel);border:1px solid var(--stroke);
+  padding:34px 26px;min-height:230px;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,border-color .45s;
+  cursor:default;
+}
+.cat-card:hover{
+  transform:translateY(-12px) rotate(-1deg);
+  border-color:rgba(255,196,0,.45);
+  box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px rgba(255,196,0,.08);
+}
+.cat-card .glow{
+  position:absolute;top:-40%;right:-40%;width:70%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,196,0,.22),transparent 70%);
+  opacity:0;transition:opacity .5s;
+  pointer-events:none;
+}
+.cat-card:hover .glow{opacity:1}
+.cat-card .num-abs{
+  position:absolute;top:18px;right:22px;font-family:var(--font-title);font-weight:900;
+  font-size:44px;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.13);
+  transition:.4s;
+}
+.cat-card:hover .num-abs{-webkit-text-stroke-color:rgba(255,196,0,.5);transform:scale(1.15)}
+.cat-card .ico{
+  font-size:42px;margin-bottom:20px;display:inline-block;filter:drop-shadow(0 6px 20px rgba(0,0,0,.4));
+  transition:transform .4s;
+}
+.cat-card:hover .ico{transform:translateY(-6px) scale(1.1) rotate(-6deg)}
+.cat-card h4{font-size:18px;font-weight:800;margin-bottom:10px;font-family:var(--font-title);font-size:16px}
+.cat-card p{font-size:13.5px;color:var(--muted);line-height:1.55}
+.cat-extra{
+  grid-column:1/-1;text-align:center;margin-top:10px;color:var(--muted);font-size:15px;
+}
+.cat-extra .chip{
+  display:inline-block;background:var(--panel);border:1px solid var(--stroke);
+  border-radius:100px;padding:9px 20px;margin:6px 5px;font-size:13.5px;font-weight:700;
+  transition:.3s;
+}
+.cat-extra .chip:hover{border-color:var(--yellow);color:var(--yellow);transform:translateY(-3px)}
+
+/* ======================== ПРЕИМУЩЕСТВА ======================== */
+.why-bg{position:relative}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative;z-index:2}
+.why-card{
+  position:relative;border-radius:var(--radius);padding:38px 30px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.035)' stroke-width='1'%3E%3Cpath d='M0 30h60M30 0v60'/%3E%3C/g%3E%3C/svg%3E");
+  border:1px solid var(--stroke);overflow:hidden;
+  transition:transform .4s,border-color .4s;
+}
+.why-card:hover{transform:translateY(-8px);border-color:rgba(0,229,255,.35)}
+.why-card .ico-big{
+  width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:30px;
+  background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,229,255,.05));
+  border:1px solid rgba(0,229,255,.3);margin-bottom:24px;
+  box-shadow:0 0 30px rgba(0,229,255,.08);
+}
+.why-card h4{font-size:20px;font-weight:800;margin-bottom:12px;font-family:var(--font-title);font-size:17px;letter-spacing:.02em}
+.why-card p{color:var(--muted);font-size:14.5px}
+.why-card .line{
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--cyan),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.why-card:hover .line{opacity:1}
+
+/* ======================== ГАЛЕРЕЯ ======================== */
+.gallery{position:relative}
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:250px;gap:16px;
+  position:relative;z-index:2;
+}
+.g-item{position:relative;border-radius:18px;overflow:hidden;cursor:pointer;border:1px solid var(--stroke)}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .5s}
+.g-item:hover img{transform:scale(1.12);filter:saturate(1.2)}
+.g-item::after{
+  content:'🔍';position:absolute;inset:0;display:grid;place-items:center;font-size:34px;
+  background:rgba(5,7,13,.5);backdrop-filter:blur(4px);
+  opacity:0;transition:opacity .4s;
+}
+.g-item:hover::after{opacity:1}
+.g-item.wide{grid-column:span 2}
+.g-item.tall{grid-row:span 2}
+.lightbox{
+  position:fixed;inset:0;z-index:9500;background:rgba(5,7,13,.94);
+  backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;
+}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox img{max-width:90vw;max-height:86vh;border-radius:14px;box-shadow:0 30px 100px rgba(0,0,0,.8);transform:scale(.92);transition:transform .4s}
+.lightbox.open img{transform:scale(1)}
+.lightbox .close{
+  position:absolute;top:30px;right:30px;width:52px;height:52px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--stroke);color:#fff;font-size:22px;
+  cursor:pointer;transition:.3s;
+}
+.lightbox .close:hover{background:var(--red);transform:rotate(90deg)}
+.lightbox .nav-btn{
+  position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--stroke);color:#fff;font-size:20px;cursor:pointer;transition:.3s;
+}
+.lightbox .nav-btn:hover{background:var(--yellow);color:#000;border-color:var(--yellow)}
+.lightbox .prev{left:24px}
+.lightbox .next{right:24px}
+
+/* ======================== КОНТАКТЫ / СОЦСЕТИ ======================== */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;position:relative;z-index:2;align-items:center}
+.contact-cards{display:flex;flex-direction:column;gap:18px}
+.с-card{
+  display:flex;align-items:center;gap:18px;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:18px;
+  padding:20px 24px;transition:transform .3s,border-color .3s,background .3s;cursor:pointer;
+}
+.с-card:hover{transform:translateX(10px);border-color:rgba(255,255,255,.25);background:var(--panel-2)}
+.с-card .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex-shrink:0}
+.с-card .ic.phone{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3)}
+.с-card .ic.mail{background:rgba(255,196,0,.12);border:1px solid rgba(255,196,0,.3)}
+.с-card .ic.pin{background:rgba(255,0,120,.12);border:1px solid rgba(255,0,120,.3)}
+.с-card .ic.time{background:rgba(0,255,133,.12);border:1px solid rgba(0,255,133,.3)}
+.с-card b{display:block;font-size:16.5px}
+.с-card span{font-size:14px;color:var(--muted)}
+.socials{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px}
+.soc-btn{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 26px;border-radius:16px;font-weight:800;font-size:15px;
+  background:var(--panel);border:1px solid var(--stroke);
+  transition:transform .3s,box-shadow .35s,border-color .3s;position:relative;overflow:hidden;
+}
+.soc-btn svg{width:24px;height:24px;flex-shrink:0}
+.soc-btn:hover{transform:translateY(-5px) scale(1.03)}
+.soc-btn.vk:hover{border-color:#07f;box-shadow:0 14px 40px rgba(0,119,255,.3);background:rgba(0,119,255,.1)}
+.soc-btn.tg:hover{border-color:#2ca5e0;box-shadow:0 14px 40px rgba(44,165,224,.3);background:rgba(44,165,224,.1)}
+.soc-btn.avito:hover{border-color:#a855f7;box-shadow:0 14px 40px rgba(168,85,247,.3);background:rgba(168,85,247,.1)}
+.contact-visual{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);border:1px solid var(--stroke);
+}
+.contact-visual img{width:100%;height:100%;object-fit:cover;min-height:440px}
+.contact-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(5,7,13,.9))}
+.contact-visual .overlay{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+}
+.contact-visual .overlay b{font-family:var(--font-title);font-weight:900;font-size:20px;display:block;margin-bottom:6px}
+.contact-visual .overlay span{color:var(--muted);font-size:14px}
+
+/* ======================== КАРТА ======================== */
+.map-section{background:linear-gradient(180deg,transparent,rgba(255,196,0,.03) 30%,rgba(255,196,0,.03) 70%,transparent)}
+.map-tabs{
+  display:inline-flex;gap:6px;background:var(--panel);border:1px solid var(--stroke);
+  padding:6px;border-radius:16px;margin-bottom:30px;position:relative;z-index:2;
+}
+.map-tab{
+  padding:13px 26px;border-radius:11px;background:none;border:none;cursor:pointer;
+  font-family:var(--font-body);font-weight:800;font-size:14px;color:var(--muted);
+  display:flex;align-items:center;gap:9px;transition:.3s;
+}
+.map-tab svg{width:19px;height:19px}
+.map-tab.active{
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  color:#000;box-shadow:0 6px 20px rgba(255,160,0,.3);
+}
+.map-box{
+  position:relative;z-index:2;border-radius:24px;overflow:hidden;
+  border:1px solid var(--stroke);
+  box-shadow:0 40px 120px rgba(0,0,0,.6);
+  height:520px;background:#0a0f1c;
+}
+.map-frame{width:100%;height:100%;border:none;display:block}
+.map-frame-wrap{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.map-frame-wrap.active{opacity:1;visibility:visible}
+.map-frame-wrap iframe{width:100%;height:100%;border:none;filter:grayscale(1) contrast(1.05) brightness(.92)}
+.map-frame-wrap.active iframe{filter:grayscale(.2) contrast(1.05) brightness(1)}
+.map-overlay-card{
+  position:absolute;left:24px;top:24px;z-index:5;max-width:300px;
+  background:rgba(5,7,13,.78);backdrop-filter:blur(16px);
+  border:1px solid var(--stroke);border-radius:18px;padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.map-overlay-card b{font-family:var(--font-title);font-weight:900;display:block;margin-bottom:8px;font-size:16px}
+.map-overlay-card .row{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:13.5px;margin-top:8px}
+.map-overlay-card .row .ico{font-size:16px}
+.map-overlay-card .btn{margin-top:16px;width:100%;justify-content:center;font-size:13.5px;padding:13px 18px}
+.coord-note{display:none}
+
+/* ======================== CTA ======================== */
+.cta-section{text-align:center;position:relative;padding:130px 0;overflow:hidden}
+.cta-section .bg{position:absolute;inset:0;z-index:0}
+.cta-section .bg::before{
+  content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,196,0,.15),transparent 70%);
+  animation:pulse 4s ease-in-out infinite;
+}
+.cta-section h2{
+  font-family:var(--font-title);font-weight:900;font-size:clamp(30px,5vw,58px);
+  margin-bottom:24px;position:relative;z-index:2;
+}
+.cta-section p{color:var(--muted);max-width:540px;margin:0 auto 44px;font-size:17px;position:relative;z-index:2}
+.cta-section .hero-actions{position:relative;z-index:2}
+
+/* ======================== ФУТЕР ======================== */
+footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70px 0 36px;position:relative;z-index:2}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:50px;margin-bottom:50px}
+.footer-about p{color:var(--muted);font-size:14px;margin-top:16px;max-width:340px}
+.footer-col h5{
+  font-family:var(--font-title);font-size:14px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:22px;color:#fff;
+}
+.footer-col a{
+  display:block;color:var(--muted);font-size:14.5px;padding:6px 0;transition:.3s;
+}
+.footer-col a:hover{color:var(--yellow);transform:translateX(6px)}
+.footer-bottom{
+  border-top:1px solid var(--stroke);padding-top:26px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+  font-size:13.5px;color:var(--muted);
+}
+.footer-bottom .legal{display:flex;gap:20px}
+.footer-bottom a:hover{color:var(--yellow)}
+
+/* ======================== КНОПКА НАВЕРХ ======================== */
+.to-top{
+  position:fixed;right:26px;bottom:26px;z-index:900;
+  width:54px;height:54px;border-radius:16px;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  border:none;color:#000;font-size:20px;cursor:pointer;
+  box-shadow:0 10px 30px rgba(255,160,0,.35);
+  opacity:0;visibility:hidden;transform:translateY(20px);
+  transition:.4s;
+}
+.to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+.to-top:hover{transform:translateY(-4px)}
+
+/* ======================== ПЛАВАЮЩАЯ КНОПКА ЗВОНКА (МОБИЛЬНЫЕ) ======================== */
+.mobile-call{
+  position:fixed;right:calc(18px + env(safe-area-inset-right));bottom:calc(18px + env(safe-area-inset-bottom));
+  z-index:890;width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  display:none;align-items:center;justify-content:center;font-size:24px;
+  box-shadow:0 12px 36px rgba(255,160,0,.45);
+  animation:callPulse 2.4s ease-in-out infinite;
+}
+@keyframes callPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,160,0,.5),0 12px 36px rgba(255,160,0,.45)}
+  50%{box-shadow:0 0 0 18px rgba(255,160,0,0),0 12px 36px rgba(255,160,0,.45)}
+}
+.mobile-call:active{transform:scale(.92)}
+.to-top{right:calc(26px + env(safe-area-inset-right));bottom:calc(26px + env(safe-area-inset-bottom))}
+
+/* ======================== АДАПТИВ ======================== */
+
+/* Планшеты и ноутбуки */
+@media(min-width:761px) and (max-width:1200px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .about-photo img{height:460px}
+  .cat-card{min-height:210px;padding:28px 22px}
+}
+@media(max-width:1024px){
+  .cats-grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr;gap:50px}
+  .contact-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .g-item.wide{grid-column:span 2}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .section{padding:100px 0}
+}
+
+/* Мобильные */
+@media(max-width:760px){
+  .nav{height:64px}
+  .nav-links{
+    position:fixed;top:64px;left:0;right:0;bottom:0;
+    flex-direction:column;justify-content:flex-start;
+    background:rgba(5,7,13,.98);backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    padding:24px 24px calc(40px + env(safe-area-inset-bottom));
+    border-bottom:1px solid var(--stroke);
+    opacity:0;visibility:hidden;transform:translateY(-12px);
+    transition:opacity .35s ease,transform .35s ease,visibility .35s;
+    gap:6px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+  .nav-links.open{opacity:1;visibility:visible;transform:translateY(0)}
+  .nav-links a{width:100%;text-align:center;padding:15px;font-size:17px;border-radius:14px}
+  .nav-links a:active{background:var(--panel-2)}
+  .nav-cta{display:none}
+  .nav-burger{display:flex;z-index:1100}
+  .mobile-call{display:flex}
+  .hero{padding-top:110px;padding-bottom:60px;min-height:auto}
+  .hero-badge{margin-bottom:20px;font-size:12px;padding:7px 14px}
+  .hero h1{font-size:clamp(38px,13vw,64px);margin-bottom:18px}
+  .hero h1 .outline{-webkit-text-stroke-width:1.5px}
+  .hero-sub{font-size:16px;margin-bottom:28px}
+  .btn{padding:15px 26px;font-size:14.5px}
+  .hero-stats{margin-top:44px;gap:22px 30px}
+  .hero-scroll{display:none}
+  .marquee{transform:none;margin:0}
+  .marquee-track{animation-duration:18s}
+  .section{padding:74px 0}
+  .section-head{margin-bottom:44px}
+  .section-head h2{font-size:clamp(26px,7.5vw,38px)}
+  .section-head p{font-size:15px}
+  .cats-grid{grid-template-columns:1fr;gap:16px}
+  .cat-card{min-height:0;padding:26px 22px}
+  .cat-card:hover{transform:none}
+  .why-grid{grid-template-columns:1fr;gap:16px}
+  .why-card{padding:30px 24px}
+  .why-card:hover{transform:none}
+  .gallery-grid{grid-template-columns:1fr;grid-auto-rows:220px;gap:12px}
+  .g-item.wide,.g-item.tall{grid-column:span 1;grid-row:span 1}
+  .about-grid{gap:40px}
+  .about-photo img{height:320px}
+  .about-float{right:12px;top:16px;padding:14px 18px}
+  .about-float .big{font-size:24px}
+  .about-item{padding:15px 16px}
+  .about-item:hover{transform:none}
+  .map-box{height:440px;border-radius:18px}
+  .map-overlay-card{display:none}
+  .map-tabs{padding:5px;border-radius:14px;width:100%;display:flex}
+  .map-tab{flex:1;justify-content:center;padding:12px 8px;font-size:13px;gap:6px}
+  .map-tab svg{width:17px;height:17px}
+  .footer-grid{grid-template-columns:1fr;gap:36px}
+  .footer-bottom{flex-direction:column;text-align:center;justify-content:center}
+  .contact-cards{gap:12px}
+  .с-card{padding:16px 18px}
+  .с-card:hover{transform:none}
+  .contact-visual img{min-height:300px}
+  .socials{flex-direction:column;gap:12px}
+  .soc-btn{justify-content:center;width:100%}
+  .contact-visual .overlay{padding:20px}
+  .contact-visual .overlay b{font-size:17px}
+  .cta-section{padding:90px 0}
+  .to-top{width:48px;height:48px;border-radius:14px;right:calc(16px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom))}
+  .mobile-call{right:calc(76px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom))}
+}
+
+/* Маленькие телефоны */
+@media(max-width:380px){
+  .hero h1{font-size:34px}
+  .hero-actions{flex-direction:column;width:100%}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .hero-stats{gap:16px 20px}
+  .hero-stat .num{font-size:28px}
+  .about-float{display:none}
+  .gallery-grid{grid-auto-rows:200px}
+  .footer-bottom .legal{gap:12px}
+}
+
+/* Тач-устройства: убираем hover-трансформации, парим опирание */
+@media(hover:none){
+  .cat-card:hover,.why-card:hover,.about-item:hover,.с-card:hover,.soc-btn:hover{
+    transform:none;box-shadow:none;
+  }
+  .about-photo:hover{transform:perspective(1200px) rotateY(-4deg) rotateX(2deg)}
+  .about-photo:hover img{transform:none}
+  .g-item:active img{transform:scale(1.08)}
+  .btn:active,.soc-btn:active,.map-tab:active{transform:scale(.96)}
+  .cursor-dot,.cursor-ring{display:none}
+}
+
+/* Уменьшение движения для пользователей с vestibular */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ПРЕЛОАДЕР -->
+<div id="preloader">
+  <div class="loader-logo">СТРОЙМАРКЕТ</div>
+  <div class="loader-bar"><i></i></div>
+  <div class="loader-text">Загружаем стройплощадку</div>
+</div>
+
+<!-- КУРСОР -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ФОНОВЫЕ СЛОИ -->
+<div class="noise"></div>
+<div class="bg-glow"></div>
+
+<!-- НАВИГАЦИЯ -->
+<header id="header">
+  <div class="container nav">
+    <a href="#hero" class="logo">
+      <span class="icon">🏗️</span>
+      <span>СТРОЙ<b>МАРКЕТ</b></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">О магазине</a>
+      <a href="#cats">Ассортимент</a>
+      <a href="#why">Почему мы</a>
+      <a href="#gallery">Галерея</a>
+      <a href="#contacts">Контакты</a>
+      <a href="#map">Карта</a>
+    </nav>
+    <a href="tel:+73919889195" class="nav-cta">📞 +7 (391) 988-91-95</a>
+    <button class="nav-burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="particles"></canvas>
+  <div class="container" style="position:relative;z-index:2">
+    <div class="hero-badge"><span class="dot"></span> Работаем ежедневно · 9:00 – 20:00</div>
+    <h1>
+      <span class="outline">СТРОЙ</span><span class="grad">МАРКЕТ</span>
+    </h1>
+    <p class="hero-sub">
+      Самый <b>крупный строительный магазин</b> в Сосновоборске.
+      Более <b>500+ групп товаров</b> на площади <b>3 690 м²</b>
+    </p>
+    <div class="hero-actions">
+      <a href="#map" class="btn btn-primary">📍 Как добраться</a>
+      <a href="tel:+73919889195" class="btn btn-ghost">📞 Позвонить</a>
+    </div>
+    <div class="hero-stats" id="stats">
+      <div class="hero-stat"><span class="num" data-count="3690">0</span><span class="lbl">м² площади</span></div>
+      <div class="hero-stat"><span class="num" data-count="500" data-suffix="+">0</span><span class="lbl">групп товаров</span></div>
+      <div class="hero-stat"><span class="num yellow" data-count="2025">0</span><span class="lbl">год открытия</span></div>
+      <div class="hero-stat"><span class="num yellow" data-count="1900">0</span><span class="lbl">м² торговый зал</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="mouse"></div>
+    Листай
+  </div>
+</section>
+
+<!-- БЕГУЩАЯ СТРОКА -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>КИРПИЧ <i>◆</i> ЦЕМЕНТ <i>★</i> ГИПСОКАРТОН <i>◆</i> САНТЕХНИКА <i>★</i> ИНСТРУМЕНТ <i>◆</i> КРОВЛЯ <i>★</i> СВАРКА <i>◆</i> ЭЛЕКТРИКА <i>★</i> КРЕПЁЖ <i>◆</i> ТЕПЛО <i>★</i></span>
+  </div>
+</div>
+
+<!-- О МАГАЗИНЕ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">О магазине</span>
+      <h2>Масштаб, который <span class="grad" style="background:linear-gradient(90deg,var(--yellow),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent">чувствуется</span></h2>
+      <p>СТРОЙМАРКЕТ — это не просто магазин, а полноценная строительная площадка возможностей в самом сердце Сосновоборска.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-photo">
+          <img src="foto_magazina/IMG_20260805_175837.jpg" alt="Торговый зал СТРОЙМАРКЕТ" loading="lazy">
+          <div class="tag"><span class="pulse-dot"></span> Открыто сейчас · 9:00–20:00</div>
+        </div>
+        <div class="about-float">
+          <div class="big">3 690 м²</div>
+          <div class="sm">Общая площадь</div>
+        </div>
+      </div>
+      <div class="about-info reveal" data-delay="1">
+        <h3>Крупнейший строительный <span class="grad">гипермаркет города</span></h3>
+        <p>Открыли свои двери в июне 2025 года и сразу стали главной точкой притяжения для строителей, мастеров и всех, кто делает ремонт с любовью.</p>
+        <div class="about-list">
+          <div class="about-item">
+            <div class="ico">🏪</div>
+            <div><b>Торговый зал — 1 901 м²</b><span>Просторные ряды, удобная навигация, всё под рукой</span></div>
+          </div>
+          <div class="about-item">
+            <div class="ico">📦</div>
+            <div><b>Склад — 1 788 м²</b><span>Гигантский запас ходовых позиций — полки не пустеют</span></div>
+          </div>
+          <div class="about-item">
+            <div class="ico">🚚</div>
+            <div><b>Собственная логистика</b><span>Кладовщики, грузчики, оборудованная погрузка — отгрузим быстро</span></div>
+          </div>
+          <div class="about-item">
+            <div class="ico">🏆</div>
+            <div><b>Статус №1 в городе</b><span>Самый крупный строймагазин Сосновоборска</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- АССОРТИМЕНТ -->
+<section class="section" id="cats">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Ассортимент</span>
+      <h2>500+ категорий<br>на любой этап стройки</h2>
+      <p>От фундамента до финишной отделки — закрываем все потребности проекта</p>
+    </div>
+    <div class="cats-grid">
+      <div class="cat-card reveal" data-tilt><div class="glow"></div><span class="num-abs">01</span><span class="ico">🧱</span><h4>Стройматериалы</h4><p>Кирпич, блоки, цемент, гипсокартон, кровля, пиломатериалы, металлопрокат</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="1"><div class="glow"></div><span class="num-abs">02</span><span class="ico">🚿</span><h4>Сантехника</h4><p>Ванны, смесители, санфаянс, радиаторы, трубы, фитинги</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="2"><div class="glow"></div><span class="num-abs">03</span><span class="ico">🔧</span><h4>Инструмент</h4><p>Ручной, электро- и бензоинструмент: дрели, перфораторы, бензопилы</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="3"><div class="glow"></div><span class="num-abs">04</span><span class="ico">⚡</span><h4>Электротовары</h4><p>Кабель, светильники, розетки, выключатели, автоматы</p></div>
+      <div class="cat-card reveal" data-tilt><div class="glow"></div><span class="num-abs">05</span><span class="ico">🔥</span><h4>Сварка</h4><p>Инверторы, полуавтоматы, электроды, проволока, маски</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="1"><div class="glow"></div><span class="num-abs">06</span><span class="ico">🌡️</span><h4>Теплооборудование</h4><p>Котлы, водонагреватели, тепловые пушки, конвекторы</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="2"><div class="glow"></div><span class="num-abs">07</span><span class="ico">🔩</span><h4>Крепёж и метизы</h4><p>Саморезы, болты, гайки, дюбели, анкеры — вся фурнитура</p></div>
+      <div class="cat-card reveal" data-tilt data-delay="3"><div class="glow"></div><span class="num-abs">08</span><span class="ico">🌿</span><h4>Сезонное</h4><p>Садовый инвентарь, снегоуборщики, мангалы, товары для отдыха</p></div>
+      <div class="cat-extra reveal">
+        <span class="chip">🧰 Хозтовары</span>
+        <span class="chip">🏠 Товары для дома</span>
+        <span class="chip">🧴 Бытовая химия</span>
+        <span class="chip">🍽️ Посуда</span>
+        <span class="chip">📐 Измерительный инструмент</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ПРЕИМУЩЕСТВА -->
+<section class="section why-bg" id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Почему мы</span>
+      <h2>Построено на принципах</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="line"></div>
+        <div class="ico-big">🏆</div>
+        <h4>Самый крупный в городе</h4>
+        <p>Максимальная площадь, самый широкий ассортимент и высокий трафик покупателей. Всё в одном месте.</p>
+      </div>
+      <div class="why-card reveal" data-delay="1">
+        <div class="line"></div>
+        <div class="ico-big">🤝</div>
+        <h4>Гибкие условия</h4>
+        <p>Работаем и с розницей, и с бригадами, и с организациями. Адаптируем периодичность и объёмы под вашу логистику.</p>
+      </div>
+      <div class="why-card reveal" data-delay="2">
+        <div class="line"></div>
+        <div class="ico-big">📊</div>
+        <h4>Прозрачность</h4>
+        <p>Отчёты по продажам, электронный документооборот, открытость к совместным акциям и спецпредложениям.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="line"></div>
+        <div class="ico-big">⚡</div>
+        <h4>ЭДО и 1С</h4>
+        <p>Электронный документооборот через «Калуга Астрал», обмен данными в Excel и 1С — без бумажной волокиты.</p>
+      </div>
+      <div class="why-card reveal" data-delay="1">
+        <div class="line"></div>
+        <div class="ico-big">🚀</div>
+        <h4>Амбициозная команда</h4>
+        <p>Строим бизнес с нуля на готовой базе. Нацелены на рост: планируем 50 млн ₽ выручки уже в первый год.</p>
+      </div>
+      <div class="why-card reveal" data-delay="2">
+        <div class="line"></div>
+        <div class="ico-big">🎁</div>
+        <h4>Акции и лояльность</h4>
+        <p>Программа лояльности, совместные акции с ведущими поставщиками: скидки, демо-дни, подарки, конкурсы.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ГАЛЕРЕЯ -->
+<section class="section gallery" id="gallery">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Галерея</span>
+      <h2>Загляните внутрь</h2>
+      <p>Нажмите на фото, чтобы рассмотреть в деталях</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="g-item wide tall reveal"><img src="foto_magazina/IMG_20260805_175837.jpg" alt="Торговый зал СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="1"><img src="foto_magazina/IMG_20260805_175733.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="2"><img src="foto_magazina/IMG_20260805_175736.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="3"><img src="foto_magazina/IMG_20260805_175739.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal"><img src="foto_magazina/IMG_20260805_175743.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="1"><img src="foto_magazina/IMG_20260805_175746.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="2"><img src="foto_magazina/IMG_20260805_175750.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="3"><img src="foto_magazina/IMG_20260805_175752.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal"><img src="foto_magazina/IMG_20260805_175808.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="1"><img src="foto_magazina/IMG_20260805_175811.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item wide reveal" data-delay="2"><img src="foto_magazina/IMG_20260805_175813.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="3"><img src="foto_magazina/IMG_20260805_175816.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal"><img src="foto_magazina/IMG_20260805_175819.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="1"><img src="foto_magazina/IMG_20260805_175822.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="2"><img src="foto_magazina/IMG_20260805_175826.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+      <div class="g-item reveal" data-delay="3"><img src="foto_magazina/IMG_20260805_175830.jpg" alt="Магазин СТРОЙМАРКЕТ" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section class="section" id="contacts">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Контакты</span>
+      <h2>Свяжитесь с нами</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-cards">
+          <a href="tel:+73919889195" class="с-card">
+            <div class="ic phone">📞</div>
+            <div><b>+7 (391) 988-91-95</b><span>Звоните — ответим на все вопросы</span></div>
+          </a>
+          <a href="mailto:infofeniks7@yandex.ru" class="с-card">
+            <div class="ic mail">✉️</div>
+            <div><b>infofeniks7@yandex.ru</b><span>Для деловых предложений и опта</span></div>
+          </a>
+          <a href="#map" class="с-card">
+            <div class="ic pin">📍</div>
+            <div><b>г. Сосновоборск, ул. Заводская, 1/7</b><span>Помещения №5–6, торговый зал + склад</span></div>
+          </a>
+          <div class="с-card">
+            <div class="ic time">🕒</div>
+            <div><b>Ежедневно 9:00 – 20:00</b><span>Без выходных и перерывов</span></div>
+          </div>
+        </div>
+        <div class="socials">
+          <a href="#" class="soc-btn vk" title="Мы ВКонтакте">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.16 17.975c-6.35 0-9.97-4.35-10.12-11.6h3.18c.1 5.38 2.48 7.65 4.36 8.12V6.375h3.03v4.63c1.86-.2 3.82-2.31 4.48-4.63h3.03c-.51 2.87-2.64 4.98-4.15 5.85 1.51.71 3.93 2.56 4.85 5.75h-3.34c-.72-2.24-2.51-3.97-4.87-4.21v4.21h-.44z"/></svg>
+            ВКонтакте
+          </a>
+          <a href="#" class="soc-btn tg" title="Мы в Telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.39 18.8 19.36c-.24 1.06-.87 1.32-1.76.82l-4.87-3.59-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.95L18.5 6.2c.39-.35-.09-.55-.61-.2L7.08 12.48l-4.73-1.48c-1.03-.32-1.05-1.03.22-1.52L20.7 3.1c.86-.32 1.61.2 1.24 1.29z"/></svg>
+            Telegram
+          </a>
+          <a href="#" class="soc-btn avito" title="Товары на Авито">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+            Макс · Авито
+          </a>
+        </div>
+      </div>
+      <div class="contact-visual reveal" data-delay="1">
+        <img src="foto_magazina/IMG_20260805_175739.jpg" alt="СТРОЙМАРКЕТ внутри" loading="lazy">
+        <div class="overlay">
+          <div>
+            <b>Приезжайте знакомиться</b>
+            <span>Всё самое нужное для стройки и ремонта</span>
+          </div>
+          <a href="#map" class="btn btn-primary" style="padding:14px 24px;font-size:14px">🗺️ На карте</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КАРТА -->
+<section class="section map-section" id="map">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Мы на карте</span>
+      <h2>Как нас найти</h2>
+      <p>г. Сосновоборск, ул. Заводская, д. 1, корп. 7</p>
+    </div>
+    <div class="map-tabs reveal" id="mapTabs">
+      <button class="map-tab active" data-map="yandex">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Яндекс Карты
+      </button>
+      <button class="map-tab" data-map="2gis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        2ГИС
+      </button>
+    </div>
+    <div class="map-box reveal" data-delay="1">
+      <div class="map-frame-wrap active" id="mapYandex">
+        <!-- Яндекс Карта: появится после загрузки страницы (см. JS) -->
+      </div>
+      <div class="map-frame-wrap" id="map2gis">
+        <iframe src="https://widgets.2gis.com/widget?center=93.354167%2C56.126389&zoom=17&size=m" title="2ГИС Карта: СТРОЙМАРКЕТ" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="map-overlay-card">
+        <b>🏗️ СТРОЙМАРКЕТ</b>
+        <div class="row"><span class="ico">📍</span><span>г. Сосновоборск, ул. Заводская, 1/7</span></div>
+        <div class="row"><span class="ico">🕒</span><span>Ежедневно 9:00–20:00</span></div>
+        <div class="row"><span class="ico">📞</span><span>+7 (391) 988-91-95</span></div>
+        <a href="https://yandex.ru/maps/?rtext=~56.126389,93.354167" target="_blank" rel="noopener" class="btn btn-primary">Построить маршрут</a>
+      </div>
+    </div>
+    <p class="coord-note">Координаты: 56.126389, 93.354167 — при необходимости уточните и обновите в файле (см. README)</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="bg"></div>
+  <div class="container">
+    <div class="reveal">
+      <h2>Стройте с <span style="background:linear-gradient(90deg,var(--yellow),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent">нами</span> масштабно!</h2>
+      <p>Загляните в СТРОЙМАРКЕТ — увидите ассортимент, вдохновитесь и начнёте свой проект уже сегодня.</p>
+      <div class="hero-actions">
+        <a href="tel:+73919889195" class="btn btn-primary">📞 Позвонить нам</a>
+        <a href="#map" class="btn btn-ghost">🗺️ Построить маршрут</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ФУТЕР -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="#hero" class="logo"><span class="icon">🏗️</span><span>СТРОЙ<b>МАРКЕТ</b></span></a>
+        <p>Крупнейший строительный магазин Сосновоборска. Более 500 групп товаров, 3 690 м² площадей и команда, которая любит своё дело.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Навигация</h5>
+        <a href="#about">О магазине</a>
+        <a href="#cats">Ассортимент</a>
+        <a href="#why">Преимущества</a>
+        <a href="#gallery">Галерея</a>
+        <a href="#map">Карта</a>
+      </div>
+      <div class="footer-col">
+        <h5>Контакты</h5>
+        <a href="tel:+73919889195">📞 +7 (391) 988-91-95</a>
+        <a href="mailto:infofeniks7@yandex.ru">✉️ infofeniks7@yandex.ru</a>
+        <a href="#map">📍 г. Сосновоборск, ул. Заводская, 1/7</a>
+        <a href="#">🕒 Ежедневно 9:00–20:00</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> СТРОЙМАРКЕТ · ООО «ФЕНИКС» · ИНН 2465368231</span>
+      <div class="legal">
+        <a href="#" title="ВКонтакте">VK</a>
+        <a href="#" title="Telegram">TG</a>
+        <a href="#" title="Авито">Авито</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ПЛАВАЮЩАЯ КНОПКА ЗВОНКА (мобильные) -->
+<a href="tel:+73919889195" class="mobile-call" aria-label="Позвонить">📞</a>
+
+<!-- КНОПКА НАВЕРХ -->
+<button class="to-top" id="toTop" aria-label="Наверх">↑</button>
+
+<!-- ЛАЙТБОКС -->
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lbClose">✕</button>
+  <button class="nav-btn prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="Просмотр фото">
+  <button class="nav-btn next" id="lbNext">›</button>
+</div>
+
+<script>
+/* ==================== ПРЕЛОАДЕР ==================== */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('preloader').classList.add('hide'),500);
+  initYandexMap();
+});
+
+/* ==================== ГОД В ФУТЕРЕ ==================== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ==================== КАСТОМНЫЙ КУРСОР (только для мыши) ==================== */
+const isTouchDevice = window.matchMedia('(hover:none)').matches || window.matchMedia('(pointer:coarse)').matches;
+if(!isTouchDevice){
+  const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function loop(){
+    rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.cat-card,.g-item,.map-tab').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('grow'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('grow'));
+  });
+}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+const header=document.getElementById('header');
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  header.classList.toggle('scrolled',y>40);
+  if(y>lastY&&y>500)header.classList.add('hidden-nav');
+  else header.classList.remove('hidden-nav');
+  lastY=y;
+  document.getElementById('toTop').classList.toggle('show',y>700);
+},{passive:true});
+document.getElementById('toTop').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+/* Мобильное меню */
+const burger=document.getElementById('burger'),navLinks=document.getElementById('navLinks');
+burger.addEventListener('click',()=>{
+  burger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  burger.classList.remove('active');navLinks.classList.remove('open');
+}));
+
+/* ==================== ЧАСТИЦЫ (HERO) ==================== */
+const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
+let W,H,parts=[];
+const particleCount = isTouchDevice ? 24 : 60;
+function sizeCanvas(){
+  W=canvas.width=canvas.offsetWidth;
+  H=canvas.height=canvas.offsetHeight;
+  parts=Array.from({length:particleCount},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,
+    r:Math.random()*2.2+.6,
+    c:Math.random()>.7?`rgba(255,196,0,`:`rgba(0,229,255,`
+  }));
+}
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  parts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;
+    if(p.y<0||p.y>H)p.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,7);
+    ctx.fillStyle=p.c+ (0.4+Math.sin(Date.now()/800+p.x)*.2)+')';
+    ctx.fill();
+  });
+  for(let i=0;i<parts.length;i++)
+    for(let j=i+1;j<parts.length;j++){
+      const a=parts[i],b=parts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+      if(d<130){
+        ctx.strokeStyle=`rgba(255,255,255,${(1-d/130)*.12})`;
+        ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+  requestAnimationFrame(drawParticles);
+}
+sizeCanvas();
+window.addEventListener('resize',sizeCanvas);
+requestAnimationFrame(drawParticles);
+
+/* ==================== MARQUEE (дублирование) ==================== */
+const track=document.getElementById('marqueeTrack');
+track.innerHTML+=track.innerHTML;
+
+/* ==================== СЧЁТЧИКИ ==================== */
+const stats=document.getElementById('stats');
+const ioCount=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-count]').forEach(el=>{
+        const max=+el.dataset.count,suffix=el.dataset.suffix||'',dur=1800,start=performance.now();
+        function tick(now){
+          const p=Math.min((now-start)/dur,1);
+          el.textContent=Math.floor(max*(1-Math.pow(1-p,3))).toLocaleString('ru-RU')+suffix;
+          if(p<1)requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+      ioCount.disconnect();
+    }
+  });
+},{threshold:.4});
+ioCount.observe(stats);
+
+/* ==================== REVEAL ПРИ СКРОЛЛЕ ==================== */
+const ioReveal=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ioReveal.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ioReveal.observe(el));
+
+/* ==================== 3D TILT (только для мыши) ==================== */
+if(!isTouchDevice){
+  document.querySelectorAll('[data-tilt]').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='';});
+  });
+}
+
+/* ==================== ЛАЙТБОКС ==================== */
+const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg');
+let lbIndex=0,lbItems=[];
+function refreshLbItems(){
+  lbItems=[...document.querySelectorAll('#galleryGrid .g-item img')].map(i=>i.src);
+}
+document.getElementById('galleryGrid').addEventListener('click',e=>{
+  const img=e.target.closest('img');
+  if(!img)return;
+  refreshLbItems();
+  lbIndex=lbItems.indexOf(img.src);
+  lbImg.src=img.src;
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+});
+function lbShow(i){
+  lbIndex=(i+lbItems.length)%lbItems.length;
+  lbImg.src=lbItems[lbIndex];
+}
+document.getElementById('lbClose').addEventListener('click',()=>{
+  lb.classList.remove('open');document.body.style.overflow='';
+});
+document.getElementById('lbPrev').addEventListener('click',()=>lbShow(lbIndex-1));
+document.getElementById('lbNext').addEventListener('click',()=>lbShow(lbIndex+1));
+lb.addEventListener('click',e=>{if(e.target===lb){lb.classList.remove('open');document.body.style.overflow='';}});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape'){lb.classList.remove('open');document.body.style.overflow='';}
+  if(e.key==='ArrowLeft')lbShow(lbIndex-1);
+  if(e.key==='ArrowRight')lbShow(lbIndex+1);
+});
+
+/* ==================== ПЕРЕКЛЮЧЕНИЕ КАРТ ==================== */
+document.getElementById('mapTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('.map-tab');
+  if(!btn)return;
+  document.querySelectorAll('.map-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const map=btn.dataset.map;
+  document.getElementById('mapYandex').classList.toggle('active',map==='yandex');
+  document.getElementById('map2gis').classList.toggle('active',map==='2gis');
+});
+
+/* ==================== ЯНДЕКС КАРТА (режим поиска, без API-ключа) ==================== */
+function initYandexMap(){
+  const wrap=document.getElementById('mapYandex');
+  const iframe=document.createElement('iframe');
+  iframe.className='map-frame';
+  iframe.setAttribute('allowfullscreen','');
+  iframe.loading='lazy';
+  // Используем встроенный виджет Яндекс Карт с меткой по адресу
+  iframe.src='https://yandex.ru/map-widget/v1/?ll=93.354167%2C56.126389&z=17&mode=whatshere&whatshere%5Bpoint%5D=93.354167%2C56.126389&whatshere%5Bzoom%5D=17';
+  wrap.appendChild(iframe);
+}
+</script>
+</body>
+</html>
