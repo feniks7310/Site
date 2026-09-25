@@ -157,6 +157,29 @@ header.hidden-nav{transform:translateY(-110%)}
   display:flex;align-items:center;justify-content:center;text-align:center;
   padding:140px 24px 80px;position:relative;overflow:hidden;
 }
+.hero-banner{
+  position:absolute;inset:0;z-index:0;overflow:hidden;background:#080b14;
+}
+.hero-banner::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(5,7,13,.48) 0%,rgba(5,7,13,.72) 62%,rgba(5,7,13,.95) 100%);
+  pointer-events:none;
+}
+.hero-banner img{
+  width:100%;height:100%;object-fit:cover;object-position:center;
+  opacity:0;transform:scale(1.04);transition:opacity 1s ease,transform 7s ease;
+}
+.hero-banner img.is-active{opacity:1;transform:scale(1)}
+.hero-banner-dots{
+  position:absolute;z-index:3;left:50%;bottom:88px;transform:translateX(-50%);
+  display:flex;gap:8px;
+}
+.hero-banner-dots button{
+  width:8px;height:8px;padding:0;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.35);transition:background .3s,transform .3s;
+}
+.hero-banner-dots button.is-active{background:var(--yellow);transform:scale(1.35)}
+.hero .container{z-index:2}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 18px;border-radius:100px;font-size:13px;font-weight:700;letter-spacing:.06em;
@@ -678,6 +701,23 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
   .about-float{display:none}
   .gallery-grid{grid-auto-rows:200px}
   .footer-bottom .legal{gap:12px}
+/* ======================== КАТАЛОГ 1С ======================== */
+.catalog-layout{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start;position:relative;z-index:2}
+.catalog-sidebar,.catalog-main{background:rgba(10,15,28,.72);border:1px solid var(--stroke);border-radius:20px;padding:18px}
+.catalog-sidebar{position:sticky;top:92px;max-height:calc(100vh - 120px);overflow:auto}
+.catalog-search{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--stroke);background:var(--panel);color:var(--text);font:inherit;margin-bottom:12px}
+.catalog-search:focus{outline:2px solid var(--yellow);outline-offset:1px}
+.catalog-tree{list-style:none;display:flex;flex-direction:column;gap:4px}.catalog-tree ul{list-style:none;padding-left:16px;border-left:1px solid var(--stroke);margin-left:7px}
+.catalog-folder{width:100%;text-align:left;background:none;border:0;color:var(--muted);padding:9px 8px;border-radius:9px;cursor:pointer;font:inherit;font-size:13px}.catalog-folder:hover,.catalog-folder.active{color:var(--yellow);background:var(--panel-2)}
+.catalog-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.catalog-count{color:var(--muted);font-size:14px}.catalog-count b{color:var(--yellow)}
+.catalog-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.product-card{border:1px solid var(--stroke);border-radius:16px;background:var(--panel);padding:12px;cursor:pointer;transition:.25s;display:flex;flex-direction:column;min-height:250px}.product-card:hover{transform:translateY(-5px);border-color:rgba(255,196,0,.5);box-shadow:0 16px 30px rgba(0,0,0,.3)}
+.product-image{height:145px;border-radius:11px;background:linear-gradient(135deg,rgba(255,196,0,.2),rgba(0,229,255,.08));display:grid;place-items:center;font-size:42px;margin-bottom:12px;overflow:hidden}.product-title{font-size:14px;line-height:1.35;min-height:57px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.product-meta{color:var(--muted);font-size:12px;margin-top:8px;display:flex;justify-content:space-between;gap:8px}.product-code{color:var(--yellow);font-weight:700}
+.product-backdrop{position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,.68);backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:.3s}.product-backdrop.open{opacity:1;visibility:visible}
+.product-drawer{position:fixed;z-index:9300;right:0;top:0;bottom:0;width:min(440px,100%);background:#fff;color:#151922;padding:30px;transform:translateX(105%);transition:transform .35s ease;overflow:auto}.product-drawer.open{transform:translateX(0)}
+.drawer-close{position:absolute;right:20px;top:18px;border:0;background:#eef0f4;border-radius:50%;width:38px;height:38px;font-size:22px;cursor:pointer}.drawer-image{height:250px;border-radius:16px;background:linear-gradient(135deg,#fff0b0,#d9f7ff);display:grid;place-items:center;font-size:72px;margin:15px 0 24px}.product-drawer h3{font:800 24px/1.25 var(--font-title);padding-right:35px}.drawer-label{color:#687083;font-size:14px;margin-top:8px}.drawer-value{font-weight:700;margin-bottom:16px}.drawer-note{background:#fff8dc;border:1px solid #f0d36a;border-radius:12px;padding:16px;margin-top:22px;color:#5d4a00;line-height:1.5}
+@media(max-width:760px){.catalog-layout{grid-template-columns:1fr}.catalog-sidebar{position:static;max-height:300px}.product-drawer{padding:24px}.drawer-image{height:210px}}
+
 }
 
 /* Тач-устройства: убираем hover-трансформации, парим опирание */
@@ -743,6 +783,16 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
 <main>
 <!-- HERO -->
 <section class="hero" id="hero">
+  <div class="hero-banner" id="heroBanner">
+    <img class="is-active" src="foto_FENIKS_logo/Банер1.jpg" alt="">
+    <img src="foto_FENIKS_logo/Банер2.jpg" alt="">
+    <img src="foto_FENIKS_logo/Банер3.jpg" alt="">
+    <img src="foto_FENIKS_logo/ChatGPT Image 22 сент. 2026 г., 15_06_24.png" alt="">
+    <img src="foto_FENIKS_logo/Gemini_Generated_Image_mdt27cmdt27cmdt2.jpg" alt="">
+    <img src="foto_FENIKS_logo/Грузят INGCO и GREEN.png" alt="">
+    <img src="foto_FENIKS_logo/Погрузка INGCO и GREENWORKS.jpg" alt="">
+    <img src="foto_FENIKS_logo/Погрузка Конвектора.jpg" alt="">
+  </div>
   <canvas id="particles"></canvas>
   <div class="container" style="position:relative;z-index:2">
     <div class="hero-badge"><span class="dot"></span> Работаем ежедневно · 9:00 – 20:00</div>
@@ -764,6 +814,7 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
       <div class="hero-stat"><span class="num yellow" data-count="1900">0</span><span class="lbl">м² торговый зал</span></div>
     </div>
   </div>
+  <div class="hero-banner-dots" id="heroBannerDots" aria-label="Выбор баннера"></div>
   <div class="hero-scroll">
     <div class="mouse"></div>
     Листай
@@ -830,21 +881,14 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
       <h2>500+ категорий<br>на любой этап стройки</h2>
       <p>От фундамента до финишной отделки — закрываем все потребности проекта</p>
     </div>
-    <div class="cats-grid">
-      <div class="cat-card reveal" data-tilt><div class="glow"></div><span class="num-abs">01</span><span class="ico">🧱</span><h4>Стройматериалы</h4><p>Кирпич, блоки, цемент, гипсокартон, кровля, пиломатериалы, металлопрокат</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="1"><div class="glow"></div><span class="num-abs">02</span><span class="ico">🚿</span><h4>Сантехника</h4><p>Ванны, смесители, санфаянс, радиаторы, трубы, фитинги</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="2"><div class="glow"></div><span class="num-abs">03</span><span class="ico">🔧</span><h4>Инструмент</h4><p>Ручной, электро- и бензоинструмент: дрели, перфораторы, бензопилы</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="3"><div class="glow"></div><span class="num-abs">04</span><span class="ico">⚡</span><h4>Электротовары</h4><p>Кабель, светильники, розетки, выключатели, автоматы</p></div>
-      <div class="cat-card reveal" data-tilt><div class="glow"></div><span class="num-abs">05</span><span class="ico">🔥</span><h4>Сварка</h4><p>Инверторы, полуавтоматы, электроды, проволока, маски</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="1"><div class="glow"></div><span class="num-abs">06</span><span class="ico">🌡️</span><h4>Теплооборудование</h4><p>Котлы, водонагреватели, тепловые пушки, конвекторы</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="2"><div class="glow"></div><span class="num-abs">07</span><span class="ico">🔩</span><h4>Крепёж и метизы</h4><p>Саморезы, болты, гайки, дюбели, анкеры — вся фурнитура</p></div>
-      <div class="cat-card reveal" data-tilt data-delay="3"><div class="glow"></div><span class="num-abs">08</span><span class="ico">🌿</span><h4>Сезонное</h4><p>Садовый инвентарь, снегоуборщики, мангалы, товары для отдыха</p></div>
-      <div class="cat-extra reveal">
-        <span class="chip">🧰 Хозтовары</span>
-        <span class="chip">🏠 Товары для дома</span>
-        <span class="chip">🧴 Бытовая химия</span>
-        <span class="chip">🍽️ Посуда</span>
-        <span class="chip">📐 Измерительный инструмент</span>
+    <div class="catalog-layout">
+      <aside class="catalog-sidebar">
+        <input class="catalog-search" id="catalogSearch" type="search" placeholder="Поиск по каталогу…" aria-label="Поиск по каталогу">
+        <div class="catalog-tree" id="catalogTree"><p class="catalog-count">Загрузка каталога 1С…</p></div>
+      </aside>
+      <div class="catalog-main">
+        <div class="catalog-toolbar"><div class="catalog-count" id="catalogBreadcrumb">Все товары</div><div class="catalog-count" id="catalogCount"></div></div>
+        <div class="catalog-cards" id="catalogCards"></div>
       </div>
     </div>
   </div>
@@ -1077,7 +1121,18 @@ footer{border-top:1px solid var(--stroke);background:rgba(5,7,13,.5);padding:70p
 <!-- КНОПКА НАВЕРХ -->
 <button class="to-top" id="toTop" aria-label="Наверх">↑</button>
 
-<!-- ЛАЙТБОКС -->
+<!-- КАТАЛОГ 1С: БОКОВАЯ ПАНЕЛЬ ТОВАРА -->
+<div class="product-backdrop" id="productBackdrop"></div>
+<aside class="product-drawer" id="productDrawer" aria-label="Характеристики товара">
+  <button class="drawer-close" id="drawerClose" aria-label="Закрыть">✕</button>
+  <div class="drawer-image" id="drawerImage">🧰</div>
+  <h3 id="drawerTitle"></h3>
+  <div class="drawer-label">Артикул</div><div class="drawer-value" id="drawerArticle"></div>
+  <div class="drawer-label">Код 1С</div><div class="drawer-value" id="drawerCode"></div>
+  <div class="drawer-label">Тип товара</div><div class="drawer-value" id="drawerType"></div>
+  <div class="drawer-note">Характеристики появятся позже. Следите за обновлениями каталога.</div>
+</aside>
+
 <div class="lightbox" id="lightbox">
   <button class="close" id="lbClose">✕</button>
   <button class="nav-btn prev" id="lbPrev">‹</button>
@@ -1134,6 +1189,35 @@ burger.addEventListener('click',()=>{
 navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
   burger.classList.remove('active');navLinks.classList.remove('open');
 }));
+
+/* ==================== БАННЕР: АВТОСМЕНА КАЖДЫЕ 10 СЕКУНД ==================== */
+const heroBanner = document.getElementById('heroBanner');
+const heroBannerImages = [...heroBanner.querySelectorAll('img')];
+const heroBannerDots = document.getElementById('heroBannerDots');
+let heroBannerIndex = 0;
+let heroBannerTimer;
+
+heroBannerImages.forEach((image, index) => {
+  const dot = document.createElement('button');
+  dot.type = 'button';
+  dot.setAttribute('aria-label', `Показать баннер ${index + 1}`);
+  dot.addEventListener('click', () => {
+    showHeroBanner(index);
+    restartHeroBannerTimer();
+  });
+  heroBannerDots.appendChild(dot);
+});
+
+function showHeroBanner(index) {
+  heroBannerIndex = (index + heroBannerImages.length) % heroBannerImages.length;
+  heroBannerImages.forEach((image, i) => image.classList.toggle('is-active', i === heroBannerIndex));
+  [...heroBannerDots.children].forEach((dot, i) => dot.classList.toggle('is-active', i === heroBannerIndex));
+}
+function restartHeroBannerTimer() {
+  clearInterval(heroBannerTimer);
+  heroBannerTimer = setInterval(() => showHeroBanner(heroBannerIndex + 1), 10000);
+}
+restartHeroBannerTimer();
 
 /* ==================== ЧАСТИЦЫ (HERO) ==================== */
 const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
@@ -1217,7 +1301,45 @@ if(!isTouchDevice){
   });
 }
 
-/* ==================== ЛАЙТБОКС ==================== */
+/* ==================== КАТАЛОГ ИЗ 1С ==================== */
+const catalogTree = document.getElementById('catalogTree');
+const catalogCards = document.getElementById('catalogCards');
+const catalogCount = document.getElementById('catalogCount');
+const catalogBreadcrumb = document.getElementById('catalogBreadcrumb');
+const productBackdrop = document.getElementById('productBackdrop');
+const productDrawer = document.getElementById('productDrawer');
+let catalogData = null, catalogCurrent = null, catalogFilter = '';
+
+function esc(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function allItems(node, result = []) { (node.items || []).forEach(i => result.push(i)); (node.folders || []).forEach(f => allItems(f, result)); return result; }
+function productIcon(item) { return /электр|кабел|светил|розет|автомат/i.test(item.title) ? '⚡' : /инструмент|дрел|перф|болт|гайк|саморез/i.test(item.title) ? '🔧' : '🧰'; }
+function renderCatalogNode(node, path = []) {
+  const list = document.createElement('ul');
+  list.className = 'catalog-tree-list';
+  (node.folders || []).forEach(folder => {
+    const li = document.createElement('li'); const button = document.createElement('button'); button.className = 'catalog-folder'; button.textContent = `📁 ${folder.title}`;
+    button.addEventListener('click', () => { catalogCurrent = { node: folder, path: [...path, folder.title] }; renderCatalogItems(); });
+    li.appendChild(button); li.appendChild(renderCatalogNode(folder, [...path, folder.title])); list.appendChild(li);
+  });
+  return list;
+}
+function renderCatalogItems() {
+  const source = catalogCurrent ? allItems(catalogCurrent.node) : allItems(catalogData.root);
+  const items = source.filter(item => `${item.title} ${item.art} ${item.code}`.toLowerCase().includes(catalogFilter));
+  catalogBreadcrumb.textContent = catalogCurrent ? catalogCurrent.path.join(' / ') : 'Все товары';
+  catalogCount.innerHTML = `Найдено: <b>${items.length.toLocaleString('ru-RU')}</b>`;
+  catalogCards.innerHTML = items.map((item, i) => `<article class="product-card" data-index="${i}"><div class="product-image">${productIcon(item)}</div><div class="product-title">${esc(item.title)}</div><div class="product-meta"><span class="product-code">${esc(item.art || 'Артикул не указан')}</span><span>${esc(item.code || '')}</span></div></article>`).join('') || '<p class="catalog-count">Товары не найдены.</p>';
+  catalogCards.querySelectorAll('.product-card').forEach(card => card.addEventListener('click', () => openProduct(items[Number(card.dataset.index)])));
+}
+function openProduct(item) {
+  document.getElementById('drawerImage').textContent = productIcon(item); document.getElementById('drawerTitle').textContent = item.full || item.title; document.getElementById('drawerArticle').textContent = item.art || 'не указан'; document.getElementById('drawerCode').textContent = item.code || 'не указан'; document.getElementById('drawerType').textContent = item.type || 'Товар'; productBackdrop.classList.add('open'); productDrawer.classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function closeProduct() { productBackdrop.classList.remove('open'); productDrawer.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('drawerClose').addEventListener('click', closeProduct); productBackdrop.addEventListener('click', closeProduct); document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProduct(); });
+document.getElementById('catalogSearch').addEventListener('input', e => { catalogFilter = e.target.value.trim().toLowerCase(); renderCatalogItems(); });
+fetch('data/catalog.json').then(r => r.json()).then(data => { catalogData = data; catalogTree.innerHTML = ''; const rootButton = document.createElement('button'); rootButton.className = 'catalog-folder active'; rootButton.textContent = `📦 ${data.root.title} — все товары`; rootButton.addEventListener('click', () => { catalogCurrent = null; catalogTree.querySelectorAll('.active').forEach(x => x.classList.remove('active')); rootButton.classList.add('active'); renderCatalogItems(); }); catalogTree.appendChild(rootButton); catalogTree.appendChild(renderCatalogNode(data.root)); renderCatalogItems(); }).catch(() => { catalogTree.innerHTML = '<p class="catalog-count">Каталог временно недоступен. Запустите сайт через локальный HTTP-сервер.</p>'; });
+
+
 const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg');
 let lbIndex=0,lbItems=[];
 function refreshLbItems(){
