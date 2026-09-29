@@ -434,7 +434,7 @@ header.hidden-nav{transform:translateY(-110%)}
 .g-item:hover img{transform:scale(1.12);filter:saturate(1.2)}
 .g-item::after{
   content:'🔍';position:absolute;inset:0;display:grid;place-items:center;font-size:34px;
-  background:rgba(26,29,32,.5);backdrop-filter:blur(4px);
+  background:linear-gradient(180deg,rgba(26,29,32,0) 45%,rgba(26,29,32,.72));
   opacity:0;transition:opacity .4s;
 }
 .g-item:hover::after{opacity:1}
@@ -1265,7 +1265,7 @@ footer{border-top:1px solid var(--stroke);background:rgba(26,29,32,.5);padding:7
   <div class="container">
     <div class="footer-grid">
       <div class="footer-about">
-        <a href="#hero" class="logo" aria-label="СТРОЙМАРКЕТ — на главную"><img class="logo-img" src="foto_FENIKS_logo/1.png" alt="СТРОЙМАРКЕТ"></a>
+        <a href="#hero" class="logo" aria-label="СТРОЙМАРКЕТ — на главную"><img class="logo-img" src="foto_FENIKS_logo/2.png" alt="СТРОЙМАРКЕТ"></a>
         <p>Крупнейший строительный магазин Сосновоборска. Более 500 групп товаров, 3 690 м² площадей и команда, которая любит своё дело.</p>
       </div>
       <div class="footer-col">
@@ -1416,7 +1416,7 @@ restartHeroBannerTimer();
 /* ==================== ЧАСТИЦЫ (HERO) ==================== */
 const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
 let W,H,parts=[];
-const particleCount = isTouchDevice ? 24 : 60;
+const particleCount = isTouchDevice ? 16 : 40;
 function sizeCanvas(){
   W=canvas.width=canvas.offsetWidth;
   H=canvas.height=canvas.offsetHeight;
@@ -1435,14 +1435,14 @@ function drawParticles(){
     if(p.y<0||p.y>H)p.vy*=-1;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.r,0,7);
-    ctx.fillStyle=p.c+ (0.4+Math.sin(Date.now()/800+p.x)*.2)+')';
+    ctx.fillStyle=p.c+ (0.3+Math.sin(Date.now()/800+p.x)*.15)+')';
     ctx.fill();
   });
   for(let i=0;i<parts.length;i++)
     for(let j=i+1;j<parts.length;j++){
       const a=parts[i],b=parts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
-      if(d<130){
-        ctx.strokeStyle=`rgba(255,255,255,${(1-d/130)*.12})`;
+      if(d<104){
+        ctx.strokeStyle=`rgba(255,160,60,${(1-d/104)*.07})`;
         ctx.lineWidth=1;
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
       }
