@@ -153,6 +153,41 @@ header.hidden-nav{transform:translateY(-110%)}
 .nav-burger.active span:nth-child(2){opacity:0}
 .nav-burger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
+/* ===== МЕГА-МЕНЮ «КАТАЛОГ» (шапка, слева-сверху, как на площадках) ===== */
+.nav-catalog{position:relative;display:flex;align-items:center}
+.nav-catalog-btn{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border:0;cursor:pointer;
+  border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));color:#0b0f18;
+  box-shadow:0 6px 20px rgba(255,107,0,.28);transition:transform .25s,box-shadow .25s;
+}
+.nav-catalog-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,107,0,.42)}
+.nav-catalog-btn i{font-style:normal;font-size:10px;transition:transform .3s}
+.nav-catalog.open .nav-catalog-btn i{transform:rotate(180deg)}
+.mega-menu{
+  position:absolute;top:calc(100% + 14px);left:0;min-width:340px;max-width:min(92vw,760px);
+  background:rgba(30,34,38,.98);border:1px solid var(--stroke);border-radius:18px;
+  box-shadow:0 30px 70px rgba(0,0,0,.55);padding:16px;
+  opacity:0;visibility:hidden;transform:translateY(-10px);transition:.25s ease;z-index:1300;
+}
+.nav-catalog:hover .mega-menu,.nav-catalog.open .mega-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.mega-menu::before{content:'';position:absolute;top:-6px;left:26px;width:12px;height:12px;background:rgba(30,34,38,.98);border-left:1px solid var(--stroke);border-top:1px solid var(--stroke);transform:rotate(45deg)}
+.mega-head{font:800 12px var(--font-title);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.mega-head span{color:var(--yellow)}
+.mega-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:min(60vh,460px);overflow-y:auto;padding-right:4px}
+.mega-item{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;cursor:pointer;
+  padding:10px 12px;border-radius:11px;border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.03);color:#eef1f5;font-size:13px;font-weight:600;transition:.16s;
+}
+.mega-item:hover{background:rgba(255,107,0,.14);border-color:rgba(255,107,0,.45);transform:translateX(2px)}
+.mega-item .mi-ico{font-size:16px;flex:0 0 auto}
+.mega-item .mi-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mega-item .mi-count{font-size:11px;color:var(--muted);flex:0 0 auto}
+.mega-loading{grid-column:1/-1;color:var(--muted);font-size:13px;padding:14px 4px}
+.mega-menu a.mega-all{display:block;margin-top:12px;padding-top:12px!important;text-align:center;color:var(--yellow);font-size:13px;font-weight:800;letter-spacing:.02em;background:none}
+.mega-menu a.mega-all::after{display:none!important}
+
 /* ======================== HERO ======================== */
 #particles{position:absolute;inset:0;z-index:1}
 .hero{
@@ -644,6 +679,12 @@ footer{border-top:1px solid var(--stroke);background:rgba(26,29,32,.5);padding:7
   .nav-links a{width:100%;text-align:center;padding:15px;font-size:17px;border-radius:14px}
   .nav-links a:active{background:var(--panel-2)}
   .nav-cta{display:none}
+  .nav-catalog{width:100%}
+  .nav-catalog-btn{width:100%;justify-content:center;font-size:16px;padding:14px;border-radius:14px}
+  .mega-menu{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;background:rgba(0,0,0,.3);border-color:rgba(255,255,255,.08);max-width:none;display:none;margin-top:8px;padding:12px}
+  .nav-catalog.open .mega-menu{display:block}
+  .mega-menu::before{display:none}
+  .mega-list{grid-template-columns:1fr;max-height:52vh}
   .nav-burger{display:flex;z-index:1100}
   .mobile-call{display:flex}
   .hero{padding-top:110px;padding-bottom:60px;min-height:auto}
@@ -884,6 +925,14 @@ footer{border-top:1px solid var(--stroke);background:rgba(26,29,32,.5);padding:7
       <img class="logo-img" src="foto_FENIKS_logo/2.png" alt="СТРОЙМАРКЕТ">
     </a>
     <nav class="nav-links" id="navLinks">
+      <div class="nav-catalog" id="navCatalog">
+        <button class="nav-catalog-btn" id="navCatalogBtn" type="button" aria-expanded="false" aria-haspopup="true">Каталог <i>▾</i></button>
+        <div class="mega-menu" id="megaMenu" role="menu">
+          <div class="mega-head">Разделы каталога <span>· из 1С</span></div>
+          <div class="mega-list" id="megaList"><div class="mega-loading">Загрузка разделов…</div></div>
+          <a class="mega-all" href="#cats">Открыть весь каталог →</a>
+        </div>
+      </div>
       <a href="#about">О магазине</a>
       <a href="#cats">Ассортимент</a>
       <a href="#why">Почему мы</a>
@@ -1384,6 +1433,20 @@ navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
   burger.classList.remove('active');navLinks.classList.remove('open');
 }));
 
+/* ===== МЕГА-МЕНЮ «КАТАЛОГ»: открытие/закрытие ===== */
+const navCatalog=document.getElementById('navCatalog');
+const navCatalogBtn=document.getElementById('navCatalogBtn');
+if(navCatalog&&navCatalogBtn){
+  navCatalog.addEventListener('mouseenter',()=>buildMegaMenu());
+  navCatalogBtn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const open=navCatalog.classList.toggle('open');
+    navCatalogBtn.setAttribute('aria-expanded',open?'true':'false');
+    if(open)buildMegaMenu();
+  });
+  document.addEventListener('click',e=>{if(!navCatalog.contains(e.target)){navCatalog.classList.remove('open');navCatalogBtn.setAttribute('aria-expanded','false');}});
+}
+
 /* ==================== БАННЕР: АВТОСМЕНА КАЖДЫЕ 10 СЕКУНД ==================== */
 const heroBanner = document.getElementById('heroBanner');
 const heroBannerImages = [...heroBanner.querySelectorAll('img')];
@@ -1630,6 +1693,24 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProduct();});
 catalogSearch.addEventListener('input',e=>{catalogFilter=e.target.value.trim().toLowerCase();searchClear.classList.toggle('show',!!catalogFilter);catalogPage=1;renderCatalog();});
 searchClear.addEventListener('click',()=>{catalogSearch.value='';catalogFilter='';searchClear.classList.remove('show');catalogPage=1;renderCatalog();catalogSearch.focus();});
 catalogSort.addEventListener('change',()=>{catalogPage=1;renderCatalog();});
+function buildMegaMenu(){
+  const list=document.getElementById('megaList');
+  if(!list||!catalogData)return;
+  const folders=catalogData.root.folders||[];
+  if(!folders.length){list.innerHTML='<div class="mega-loading">Разделы не найдены</div>';return;}
+  list.innerHTML=folders.map((f,i)=>`<button class="mega-item" data-mega="${i}" type="button"><span class="mi-ico">${folderIcon(f.title)}</span><span class="mi-title">${esc(f.title)}</span><span class="mi-count">${f.__count}</span></button>`).join('');
+  list.querySelectorAll('[data-mega]').forEach(b=>b.addEventListener('click',()=>{
+    const f=folders[+b.dataset.mega];
+    resetTo([{node:catalogData.root,title:catalogData.root.title},{node:f,title:f.title}]);
+    const nc=document.getElementById('navCatalog'),nb=document.getElementById('navCatalogBtn');
+    if(nc)nc.classList.remove('open');
+    if(nb)nb.setAttribute('aria-expanded','false');
+    const nl=document.getElementById('navLinks'),bg=document.getElementById('burger');
+    if(nl)nl.classList.remove('open'); if(bg)bg.classList.remove('active');
+    const cats=document.getElementById('cats');
+    if(cats)cats.scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+}
 fetch('data/catalog.json').then(r=>r.json()).then(data=>{
   catalogData=data;
   annotate(data.root);
